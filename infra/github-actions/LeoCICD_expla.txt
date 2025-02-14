@@ -1,0 +1,51 @@
+explanation for the ci file in case of confusion, 
+
+Line	Purpose
+
+on: push / on: pull_request	Runs on every push and PR to main.
+
+runs-on: ubuntu-latest	Uses Ubuntu as the OS for the runner.
+
+uses: actions/checkout@v3	Clones the GitHub repository.
+
+uses: actions/setup-python@v4	Installs Python 3.10 for the pipeline.
+
+uses: actions/cache@v3	Caches dependencies to make runs faster.
+
+pip install -r requirements.txt	Installs project dependencies.
+
+pip install flake8 black bandit pytest	Installs linters and security tools.
+
+flake8 leo/	Runs linting to check for Python syntax errors.
+
+black --check leo/	Ensures code follows Black formatting.
+
+bandit -r leo/	Scans for security vulnerabilities.
+
+pytest	Runs all test cases.
+
+if: failure()	If any step fails, sends a Slack notification.
+
+
+
+explanation for the cd file in case of confusion, 
+
+Line	Purpose
+
+on: push: tags: "v*"	Only runs when a tag like v1.0.0 is pushed.
+
+uses: actions/checkout@v3	Clones the repository.
+
+uses: actions/setup-python@v4	Installs Python 3.10.
+
+pip install build twine	Installs build tools to create a Python package.
+
+python -m build	Builds the Python package.
+
+twine upload dist/*	Uploads the package to PyPI (like npm but for Python).
+
+if: failure()	If deployment fails, sends a Slack notification.
+
+
+
+PYPI_USERNAME and PYPI_PASSWORD are environment variables used to authenticate the deployment process to PyPI (Python Package Index). These values are stored as GitHub secrets for security reasons, meaning they are not hardcoded into the code but are retrieved from the GitHub repository's secret settings.
